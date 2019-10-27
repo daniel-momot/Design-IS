@@ -1,6 +1,7 @@
 from lib.input_lib import read_data_from_file, verify_input
 from lib.similarity import build_similarity_matrix
 from lib.part1 import calculate_unknown_grades_kNN
+from lib.output_lib import do_output
 
 
 
@@ -23,9 +24,17 @@ sim = build_similarity_matrix(grades)
 ''' np.set_printoptions(threshold=sys.maxsize)
  print(sim) '''
 
+
 k = 4
-counted_grades = calculate_unknown_grades_kNN(0, grades, sim, k)
-print(counted_grades)
+calculate_unknown_grades_kNN(0, grades, sim, k)
+grades_list = list()
+for user_num in range(len(users)):
+    grades_list.append(calculate_unknown_grades_kNN(0, grades, sim, k))
+
+do_output(users, movies, grades_list, 'output.json')
+
+
+
 
 
 
