@@ -3,8 +3,6 @@ from lib.similarity import build_similarity_matrix
 from lib.part1 import calculate_unknown_grades_kNN
 from lib.output_lib import do_output
 
-
-
 grades_to_set = {
     str(1): 1, str(2): 2, str(3): 3,
     str(4): 4, str(5): 5, str(-1): -1 }
@@ -29,7 +27,7 @@ k = 4
 calculate_unknown_grades_kNN(0, grades, sim, k)
 grades_list = list()
 for user_num in range(len(users)):
-    grades_list.append(calculate_unknown_grades_kNN(0, grades, sim, k))
+    grades_list.append(calculate_unknown_grades_kNN(user_num, grades, sim, k))
 
 do_output(users, movies, grades_list, 'output.json')
 
