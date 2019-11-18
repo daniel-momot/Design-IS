@@ -2,13 +2,13 @@ import numpy as np
 import sys
 
 
-def read_data_from_file(filename, possible_values):
+def read_from_file(filename, possible_values):
     try:
         with open(filename,"r") as file:
-            
+
             movies_names = file.readline().strip().split(', ')
             movies_names.pop(0)
-            
+
             users_names = list()
             users_info_raw = [line.strip().split(', ') for line in file] # список списков слов
             data_shape = [len(users_info_raw), len(users_info_raw[0]) - 1]
@@ -44,9 +44,7 @@ def verify_input(*args):
                 if b1 != b2:
                     sys.exit("unconsistent data arrays empty values!")
 
-    res = [arg1['movies'], arg1['users']]        
+    res = [arg1['movies'], arg1['users']]
     for arg in args:
         res.append(arg['data'])
     return res
-    
-       
