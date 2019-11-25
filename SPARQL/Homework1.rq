@@ -1,0 +1,29 @@
+# Запрос 11 - список фильмов, которые получили Оскар или награду на Каннском фестивале в том же году
+# Фильм 3   - The Godfather: Part II
+
+# Ставлю DISTINCT, т.к. некоторые фильмы получили более одной премии единовременно
+SELECT DISTINCT ?movieLabel  WHERE {
+  
+  # С учетом, что награда - это "Оскар" или награда Каннского фестиваля
+  { ?award wdt:P31 wd:Q19020 . } UNION { ?award wdt:P31 wd:Q28444913 . }
+
+  # Находим уникальные годы выдачи Оскаров и наград Каннского фестиваля фильму 'The Godfather: Part II'
+  # Ставлю DISTINCT, т.к. фильм получил более одной премии единовременно
+  { 
+    SELECT DISTINCT ?gf_year
+    WHERE {
+      wd:Q184768 p:P166 ?awardStat.          # Получаем все регалии фильма "Крестный отец"...
+      ?awardStat ps:P166 ?award.             # ... которые получены как награды выбранного типа
+      ?awardStat pq:P805 ?awardEdition .     # Получаем событие выдачи премии
+      ?awardEdition wdt:P585 ?date .         # Получаем дату события
+      BIND(str(YEAR(?date)) AS ?gf_year). }  # Извлекаем номер года
+  }
+  
+  ?movie wdt:P31 wd:Q11424.                  # Выбираем фильмы...
+  ?movie p:P166 ?awardStat.                  # ... имеющие регалии...
+  ?awardStat ps:P166 ?award.                 # ... которые получены как награды выбранного типа
+  ?awardStat pq:P585 ?date.                  # Получаем дату вручения
+  FILTER(str(YEAR(?date)) = ?gf_year).        # Проверяем совпадение года
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
