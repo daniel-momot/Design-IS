@@ -1,0 +1,602 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## [mlcourse.ai](https://mlcourse.ai) – Open Machine Learning Course \n",
+    "Author: Arina Lopukhova (@erynn). Edited by [Yury Kashnitskiy](https://yorko.github.io) (@yorko) and Vadim Shestopalov (@vchulski). This material is subject to the terms and conditions of the [Creative Commons CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license. Free use is permitted for any non-commercial purpose."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The dataset has the following features:\n",
+    "\n",
+    "- __ID__ - Unique number for each athlete\n",
+    "- __Name__ - Athlete's name\n",
+    "- __Sex__ - M or F\n",
+    "- __Age__ - Integer\n",
+    "- __Height__ - In centimeters\n",
+    "- __Weight__ - In kilograms\n",
+    "- __Team__ - Team name\n",
+    "- __NOC__ - National Olympic Committee 3-letter code\n",
+    "- __Games__ - Year and season\n",
+    "- __Year__ - Integer\n",
+    "- __Season__ - Summer or Winter\n",
+    "- __City__ - Host city\n",
+    "- __Sport__ - Sport\n",
+    "- __Event__ - Event\n",
+    "- __Medal__ - Gold, Silver, Bronze, or NA"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Change the path to the dataset file if needed. \n",
+    "PATH = 'athlete_events.csv'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>ID</th>\n",
+       "      <th>Name</th>\n",
+       "      <th>Sex</th>\n",
+       "      <th>Age</th>\n",
+       "      <th>Height</th>\n",
+       "      <th>Weight</th>\n",
+       "      <th>Team</th>\n",
+       "      <th>NOC</th>\n",
+       "      <th>Games</th>\n",
+       "      <th>Year</th>\n",
+       "      <th>Season</th>\n",
+       "      <th>City</th>\n",
+       "      <th>Sport</th>\n",
+       "      <th>Event</th>\n",
+       "      <th>Medal</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>A Dijiang</td>\n",
+       "      <td>M</td>\n",
+       "      <td>24.0</td>\n",
+       "      <td>180.0</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>China</td>\n",
+       "      <td>CHN</td>\n",
+       "      <td>1992 Summer</td>\n",
+       "      <td>1992</td>\n",
+       "      <td>Summer</td>\n",
+       "      <td>Barcelona</td>\n",
+       "      <td>Basketball</td>\n",
+       "      <td>Basketball Men's Basketball</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>A Lamusi</td>\n",
+       "      <td>M</td>\n",
+       "      <td>23.0</td>\n",
+       "      <td>170.0</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>China</td>\n",
+       "      <td>CHN</td>\n",
+       "      <td>2012 Summer</td>\n",
+       "      <td>2012</td>\n",
+       "      <td>Summer</td>\n",
+       "      <td>London</td>\n",
+       "      <td>Judo</td>\n",
+       "      <td>Judo Men's Extra-Lightweight</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>Gunnar Nielsen Aaby</td>\n",
+       "      <td>M</td>\n",
+       "      <td>24.0</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Denmark</td>\n",
+       "      <td>DEN</td>\n",
+       "      <td>1920 Summer</td>\n",
+       "      <td>1920</td>\n",
+       "      <td>Summer</td>\n",
+       "      <td>Antwerpen</td>\n",
+       "      <td>Football</td>\n",
+       "      <td>Football Men's Football</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>Edgar Lindenau Aabye</td>\n",
+       "      <td>M</td>\n",
+       "      <td>34.0</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Denmark/Sweden</td>\n",
+       "      <td>DEN</td>\n",
+       "      <td>1900 Summer</td>\n",
+       "      <td>1900</td>\n",
+       "      <td>Summer</td>\n",
+       "      <td>Paris</td>\n",
+       "      <td>Tug-Of-War</td>\n",
+       "      <td>Tug-Of-War Men's Tug-Of-War</td>\n",
+       "      <td>Gold</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>Christine Jacoba Aaftink</td>\n",
+       "      <td>F</td>\n",
+       "      <td>21.0</td>\n",
+       "      <td>185.0</td>\n",
+       "      <td>82.0</td>\n",
+       "      <td>Netherlands</td>\n",
+       "      <td>NED</td>\n",
+       "      <td>1988 Winter</td>\n",
+       "      <td>1988</td>\n",
+       "      <td>Winter</td>\n",
+       "      <td>Calgary</td>\n",
+       "      <td>Speed Skating</td>\n",
+       "      <td>Speed Skating Women's 500 metres</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   ID                      Name Sex   Age  Height  Weight            Team  \\\n",
+       "0   1                 A Dijiang   M  24.0   180.0    80.0           China   \n",
+       "1   2                  A Lamusi   M  23.0   170.0    60.0           China   \n",
+       "2   3       Gunnar Nielsen Aaby   M  24.0     NaN     NaN         Denmark   \n",
+       "3   4      Edgar Lindenau Aabye   M  34.0     NaN     NaN  Denmark/Sweden   \n",
+       "4   5  Christine Jacoba Aaftink   F  21.0   185.0    82.0     Netherlands   \n",
+       "\n",
+       "   NOC        Games  Year  Season       City          Sport  \\\n",
+       "0  CHN  1992 Summer  1992  Summer  Barcelona     Basketball   \n",
+       "1  CHN  2012 Summer  2012  Summer     London           Judo   \n",
+       "2  DEN  1920 Summer  1920  Summer  Antwerpen       Football   \n",
+       "3  DEN  1900 Summer  1900  Summer      Paris     Tug-Of-War   \n",
+       "4  NED  1988 Winter  1988  Winter    Calgary  Speed Skating   \n",
+       "\n",
+       "                              Event Medal  \n",
+       "0       Basketball Men's Basketball   NaN  \n",
+       "1      Judo Men's Extra-Lightweight   NaN  \n",
+       "2           Football Men's Football   NaN  \n",
+       "3       Tug-Of-War Men's Tug-Of-War  Gold  \n",
+       "4  Speed Skating Women's 500 metres   NaN  "
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data = pd.read_csv(PATH)\n",
+    "data.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__1. How old were the youngest male and female participants of the 1992 Olympics?__\n",
+    "\n",
+    "\n",
+    "- 16 and 15\n",
+    "- 14 and 13 \n",
+    "- 13 and 11\n",
+    "- 11 and 12"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 192,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "11.0 12.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "males_1992 = data[(data.Year==1992) & (data.Sex=='M')]\n",
+    "females_1992 = data[(data.Year==1992) & (data.Sex=='F')]\n",
+    "age_m = males_1992.Age.min()\n",
+    "age_f = females_1992.Age.min()\n",
+    "print(age_m, age_f)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__2. What was the percentage of male basketball players among all the male participants of the 2012 Olympics? Round the answer to the first decimal.__\n",
+    "\n",
+    "*Hint:* drop duplicate athletes where necessary to count each athlete just once. This applies to other questions too. \n",
+    "\n",
+    "- 0.2\n",
+    "- 1.5 \n",
+    "- 2.5\n",
+    "- 7.7"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 203,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2.5\n"
+     ]
+    }
+   ],
+   "source": [
+    "# You code here\n",
+    "male_2012 = data[(data.Year==2012) & (data.Sex=='M')]\n",
+    "male_2012_basket = male_2012[(male_2012.Sport=='Basketball')]\n",
+    "\n",
+    "m = male_2012.ID.unique().size\n",
+    "mb = male_2012_basket.ID.unique().size\n",
+    "print(round(100 * mb / m, 1))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__3. What are the mean and standard deviation of height for female tennis players who participated in the 2000 Olympics? Round the answer to the first decimal.__\n",
+    "\n",
+    "- 171.8 and 6.5\n",
+    "- 179.4 and 10\n",
+    "- 180.7 and 6.7\n",
+    "- 182.4 and 9.1 "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "171.8 and 6.5\n"
+     ]
+    }
+   ],
+   "source": [
+    "targ = data[(data.Sport=='Tennis') & (data.Sex=='F') & (data.Year==2000)]\n",
+    "targ_height = targ['Height']\n",
+    "mean = round(targ_height.mean(), 1)\n",
+    "deviation = round(targ_height.std(), 1)\n",
+    "print(mean, \"and\", deviation)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__4. Find the heaviest athlete among 2006 Olympics participants. What sport did he or she do?__\n",
+    "\n",
+    "\n",
+    "- Judo\n",
+    "- Bobsleigh \n",
+    "- Skeleton\n",
+    "- Boxing"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Skeleton']\n"
+     ]
+    }
+   ],
+   "source": [
+    "targ = data[(data.Year==2006)]\n",
+    "max_weight = targ['Weight'].max()\n",
+    "max_weight_items = targ[(targ.Weight==max_weight)]\n",
+    "print(max_weight_items.Sport.values)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__5. How many times did John Aalberg participate in the Olympics held in different years?__\n",
+    "\n",
+    "\n",
+    "- 0\n",
+    "- 1 \n",
+    "- 2\n",
+    "- 3 "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 76,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2\n"
+     ]
+    }
+   ],
+   "source": [
+    "targ = data[(data.Name=='John Aalberg')]\n",
+    "targ_unique_years = targ.Year.unique()\n",
+    "print(targ_unique_years.size)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__6. How many gold medals in tennis did the Switzerland team win at the 2008 Olympics?__\n",
+    "\n",
+    "\n",
+    "- 0\n",
+    "- 1 \n",
+    "- 2\n",
+    "- 3 "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 99,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2\n"
+     ]
+    }
+   ],
+   "source": [
+    "target = data[(data.Team==\"Switzerland\") & (data.Sport==\"Tennis\") & (data.Year==2008)]\n",
+    "target_gold = target[(target.Medal==\"Gold\")].ID\n",
+    "print(target_gold.size)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__7. Is it true that Spain won fewer medals than Italy at the 2016 Olympics? Do not consider NaN values in _Medal_ column.__ \n",
+    "\n",
+    "\n",
+    "- Yes\n",
+    "- No"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 204,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Spain: 63 Italy: 68 Result: Yes\n"
+     ]
+    }
+   ],
+   "source": [
+    "spain = data[(data.Team==\"Spain\") & (data.Year==2012) & (pd.notna(data.Medal))]\n",
+    "italy = data[(data.Team==\"Italy\") & (data.Year==2012) & (pd.notna(data.Medal))]\n",
+    "sp_size = spain.ID.size\n",
+    "it_size = italy.ID.size\n",
+    "print(\"Spain:\", sp_size, \"Italy:\", it_size, \"Result:\", (\"Yes\" if sp_size<it_size else \"No\"))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__8. What are the most and least common age groups among the participants of the 2008 Olympics?__\n",
+    "\n",
+    "\n",
+    "- [45-55] and [25-35) correspondingly\n",
+    "- [45-55] and [15-25) correspondingly\n",
+    "- [35-45) and [25-35) correspondingly\n",
+    "- [45-55] and [35-45) correspondingly"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 167,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Age groups count: [6294, 6367, 790, 119]\n",
+      "[45-55] and [25-35) correspondingly\n"
+     ]
+    }
+   ],
+   "source": [
+    "target = data[data.Year==2008]\n",
+    "gr = []\n",
+    "# 0 = ), 1 = ]\n",
+    "gap = [ [15, 25, 0], [25, 35, 0], [35, 45, 0], [45, 55, 1] ]\n",
+    "for i in range(len(gap)):\n",
+    "    if gap[i][2]==0:\n",
+    "        dat = target[(target.Age>=gap[i][0]) & (target.Age<gap[i][1])]\n",
+    "    else:\n",
+    "        dat = target[(target.Age>=gap[i][0]) & (target.Age<=gap[i][1])]\n",
+    "    gr.append(dat.ID.size)\n",
+    "           \n",
+    "strs = [\"[\"+str(i[0])+\"-\"+str(i[1])+\")\" if i[2]==0 else \"[\"+str(i[0])+\"-\"+str(i[1])+\"]\" for i in gap]\n",
+    "\n",
+    "maxnum = gr.index(max(gr))\n",
+    "minnum = gr.index(min(gr))\n",
+    "\n",
+    "print(\"Age groups count:\", gr)\n",
+    "print(strs[minnum], \"and\", strs[maxnum], \"correspondingly\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__9. Is it true that there were Summer Olympics held in Atlanta? Is it true that there were Winter Olympics held in Squaw Valley?__\n",
+    "\n",
+    "\n",
+    "- Yes, Yes\n",
+    "- Yes, No\n",
+    "- No, Yes \n",
+    "- No, No "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 173,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Yes Yes\n"
+     ]
+    }
+   ],
+   "source": [
+    "atlanta_sz = data[(data.City==\"Atlanta\")].ID.size\n",
+    "sq_val_sz = data[(data.City==\"Squaw Valley\")].ID.size\n",
+    "res1 = \"Yes\" if atlanta_sz>0 else \"No\"\n",
+    "res2 = \"Yes\" if sq_val_sz>0 else \"No\"\n",
+    "print(res1, res2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "__10. What is the absolute difference between the number of unique sports at the 1986 Olympics and 2002 Olympics?__\n",
+    "\n",
+    "\n",
+    "- 3 \n",
+    "- 10\n",
+    "- 15\n",
+    "- 27 "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 188,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "15\n"
+     ]
+    }
+   ],
+   "source": [
+    "targ1 = data[(data.Year==1986)][\"Sport\"].unique().size\n",
+    "targ2 = data[(data.Year==2002)][\"Sport\"].unique().size\n",
+    "print(targ2 - targ1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "That's it! Now go and do 30 push-ups! :)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
