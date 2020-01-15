@@ -1,6 +1,6 @@
 import io  # needed because of weird encoding of u.item file
 
-from surprise import KNNBaseline
+from surprise import KNNWithMeans
 from surprise import Dataset
 from surprise import get_dataset_dir
 
@@ -29,7 +29,7 @@ input_user_id = input('Enter user number: ')
 data = Dataset.load_builtin('ml-100k')
 trainset = data.build_full_trainset()
 sim_options = {'name': 'cosine', 'user_based': True, 'min_support': 5}
-algo = KNNBaseline(k=4, sim_options=sim_options)
+algo = kNNWithMeans(k=4, min_k=4, sim_options=sim_options)
 algo.fit(trainset)
 
 # Drop out the missing ratings and make predictions
